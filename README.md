@@ -1,10 +1,78 @@
-# **Traffic Sign Recognition** 
+# Traffic Sign Classification in Tensorflow
 
-## Writeup
+This project trains and test a very simple classification neural network. The neural network has a LeNet architecture with dropout added in the fully connected layer for better training. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+[//]: # (List of Images used in this README.md)
+[image1]: ./examples/visualization.jpg "Visualization"
+[image2]: ./examples/grayscale.jpg "Grayscaling"
+[image3]: ./examples/random_noise.jpg "Random Noise"
+[image4]: ./examples/placeholder.png "Traffic Sign 1"
+[image5]: ./examples/placeholder.png "Traffic Sign 2"
+[image6]: ./examples/placeholder.png "Traffic Sign 3"
+[image7]: ./examples/placeholder.png "Traffic Sign 4"
+[image8]: ./examples/placeholder.png "Traffic Sign 5"
 
----
+![alt text](README_images/simple_lane_detection.gif)
+
+
+## Directory Structure
+```
+.Simple-Lane-Detection
+├── demo.ipynb                   # Main file
+├── .gitignore                   # git file to prevent unnecessary files from being uploaded
+├── README_images                # Images used by README.md
+│   └── ...
+├── README.md
+└── Udacity_dataset
+    ├── examples                 # images used by demo.ipynb and a pair of ground truth videos
+    │   └── ...
+    ├── test_images              # input images
+    │   └── ...
+    ├── test_images_output       # output directory generated automatically once you run demo.ipynb
+    │   └── ...
+    ├── test_videos              # input videos
+    │   └── ...
+    └── test_videos_output       # output directory generated automatically once you run demo.ipynb
+        └── ...
+```
+
+## Demo File
+
+#### Dataset
+The demo file makes use of German traffic sign dataset to show results. However, once you have run and understood the `demo.ipynb`, feel free to try your own dataset by changing the input directory from the 'Read in Test Image' and 'Read in Test Video' sections from the demo file. The results of your own dataset will be displayed in an utput directory generated automatically by `demo.ipynb` at the same directory level as your input directory.
+
+#### Helper Functions
+- `region_of_interest` keeps the region of the image defined by the user while the rest of the image is set to black.
+- `ransac_polyfit` finds the best 2nd order model coefficients by randomly testing subsets of a lane's line 
+- `line_slope_classifier` classifies pairs of pixel coordinates as left or right lane line based on the pair's line slope. It also allows the user to increase the density of points belonging to left or right lane line.
+- `draw_lines` makes use of `region_of_interest`, `ransac_polyfit`, and `line_slope_classifier` to draw the left and right lines of the vehicle's current lane with a user defined color and thickness.
+- `draw_roi_box` this is a visual helper. It draws a contour of color around the region of interest to visually identify it. 
+- `draw_hough_lines` this is a visual helper. It draws all hough lines with random colors to visually identify them.
+
+#### Pipeline 
+This is the process through which each image or video frame goes through.
+
+<p align="center"> <img src="README_images/before.PNG"> </p>
+<p align="center"> Fig: Original Image </p>
+
+<p align="center"> <img src="README_images/pipeline.PNG"> </p>
+<p align="center"> Fig: Step 1 -> transform to gray.
+    Step 2 -> blurr image.
+    Step 3 -> apply canny edge detection.
+    Step 4 -> obtain region of interest.
+    Step 5 -> apply hough transform.
+    Step 6 -> draw lines: classify hough lines and apply RANSAC to find polynomial model. </p>
+
+<p align="center"> <img src="README_images/after.PNG"> </p>
+<p align="center">Fig: Final image (Note: Step 6 can be applied directly to the color image) </p>
+
+
+## Drawbacks and improvements
+
+From the challenge video one can identify that the techniques implemented are good for determining lines on on the road but has issues extrapolating those lines. `line_slope_classifier` function needs improvement since it fails when the lane has steep curves. Also the second order polinomial line models for each line should share the same `a` coefficient in `ay^2+by+c` since both lines curve in the same direction. We will deal with this issues in our next repo.
+
+
+
 
 **Build a Traffic Sign Recognition Project**
 
@@ -17,16 +85,7 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 
-[//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
