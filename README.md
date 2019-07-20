@@ -1,16 +1,16 @@
 # Traffic Sign Classification in Tensorflow
 
-This project trains and test a very simple classification neural network. The neural network has a LeNet architecture with dropout added in the fully connected layer for better training. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
+This project trains and test a very simple classification neural network. The neural network has a LeNet architecture with dropout added in the fully connected layers to improve training. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This implies ONE object per image as oppose to Detection which implies MULTIPLE objects per image. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
 
 [//]: # (List of Images used in this README.md)
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image1]: ./README_images/visualization.jpg "Visualization"
+[image2]: ./README_images/grayscale.jpg "Grayscaling"
+[image3]: ./README_images/random_noise.jpg "Random Noise"
+[image4]: ./README_images/placeholder.png "Traffic Sign 1"
+[image5]: ./README_images/placeholder.png "Traffic Sign 2"
+[image6]: ./README_images/placeholder.png "Traffic Sign 3"
+[image7]: ./README_images/placeholder.png "Traffic Sign 4"
+[image8]: ./README_images/placeholder.png "Traffic Sign 5"
 
 ![alt text](README_images/simple_lane_detection.gif)
 
