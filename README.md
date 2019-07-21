@@ -17,23 +17,24 @@ This project trains and test a very simple classification neural network. The ne
 
 ## Directory Structure
 ```
-.Simple-Lane-Detection
+.Traffic-Sign-Classifier
 ├── demo.ipynb                   # Main file
 ├── .gitignore                   # git file to prevent unnecessary files from being uploaded
 ├── README_images                # Images used by README.md
 │   └── ...
 ├── README.md
-└── Udacity_dataset
-    ├── examples                 # images used by demo.ipynb and a pair of ground truth videos
-    │   └── ...
-    ├── test_images              # input images
-    │   └── ...
-    ├── test_images_output       # output directory generated automatically once you run demo.ipynb
-    │   └── ...
-    ├── test_videos              # input videos
-    │   └── ...
-    └── test_videos_output       # output directory generated automatically once you run demo.ipynb
-        └── ...
+├── net_weights
+│   ├── checkpoint
+│   ├── lenet.ckpt.data-00000-of-00001
+│   ├── lenet.ckpt.index
+│   └── lenet.ckpt.meta
+└── dataset
+    ├── German_Traffic_Sign_Dataset
+    │   ├── signnames.csv
+    │   ├── test.p
+    │   ├── train.p
+    │   └── valid.p
+    └── US_Traffic_Sign_Dataset
 ```
 
 ## Demo File
