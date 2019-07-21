@@ -1,3 +1,2 @@
-dataset/German_Traffic_Sign_Dataset/train.p
-dataset/German_Traffic_Sign_Dataset/valid.p
+dataset/German_Traffic_Sign_Dataset/*.p
 .ipynb_checkpoints
