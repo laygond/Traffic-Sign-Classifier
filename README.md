@@ -1,18 +1,17 @@
 # Traffic Sign Classification in Tensorflow
 
-This project trains and test a very simple classification neural network. The neural network has a LeNet architecture with dropout added in the fully connected layers to improve training. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This implies ONE object per image as oppose to Detection which implies MULTIPLE objects per image. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
+This project trains and test a very simple classification neural network. The neural network has a LeNet architecture with dropout added in the fully connected layers to improve accuracy. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This implies ONE object per image as oppose to Detection which implies MULTIPLE objects per image. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
 
 [//]: # (List of Images used in this README.md)
-[image1]: ./README_images/visualization.jpg "Visualization"
-[image2]: ./README_images/grayscale.jpg "Grayscaling"
-[image3]: ./README_images/random_noise.jpg "Random Noise"
-[image4]: ./README_images/placeholder.png "Traffic Sign 1"
-[image5]: ./README_images/placeholder.png "Traffic Sign 2"
-[image6]: ./README_images/placeholder.png "Traffic Sign 3"
-[image7]: ./README_images/placeholder.png "Traffic Sign 4"
-[image8]: ./README_images/placeholder.png "Traffic Sign 5"
+[image1]: ./README_images/visualization.gif "Visualization"
+[image2]: ./README_images/traffic_sign_catalog.png "Catalog"
+[image3]: ./README_images/train_set_dist.png "Training Set Distribution"
+[image4]: ./README_images/architecture.png "Model Architecture"
+[image5]: ./README_images/NNparam.png "Model Parameters"
+[image6]: ./README_images/traffic_signs.png "Traffic Signs"
+[image7]: ./README_images/stopinspect.png "Stop Sign Inspect"
 
-![alt text](README_images/simple_lane_detection.gif)
+![alt text][image1]
 
 
 ## Directory Structure
@@ -23,209 +22,113 @@ This project trains and test a very simple classification neural network. The ne
 ├── README_images                # Images used by README.md
 │   └── ...
 ├── README.md
-├── net_weights
-│   ├── checkpoint
-│   ├── lenet.ckpt.data-00000-of-00001
-│   ├── lenet.ckpt.index
-│   └── lenet.ckpt.meta
+├── net_weights                  # the model's kernel weights are stored here
+│   └── ...
 └── dataset
     ├── German_Traffic_Sign_Dataset
-    │   ├── signnames.csv
-    │   ├── test.p
-    │   ├── train.p
-    │   └── valid.p
+    │   ├── signnames.csv        # name and ID of each traffic sign in the dataset
+    │   ├── my_test_images       # images found by me on the web for testing (ADD YOUR OWN HERE)
+    │   │   └── ...
+    │   ├── test.p               # second collection of test images for testing and comes
+    │   ├── train.p              #in same format as training and validation, i.e, resized
+    │   └── valid.p              #images stored as pickle files 
     └── US_Traffic_Sign_Dataset
 ```
 
 ## Demo File
+#### Overview
+The demo file has the following sections:
+
+- Load the data set (see below for links to the project data set)
+- Explore and visualize the data set
+- Model architecture Design
+- Train and Validate Model
+- Test Model
+- Inpection & Analysis of Model
 
 #### Dataset
-The demo file makes use of German traffic sign dataset to show results. However, once you have run and understood the `demo.ipynb`, feel free to try your own dataset by changing the input directory from the 'Read in Test Image' and 'Read in Test Video' sections from the demo file. The results of your own dataset will be displayed in an utput directory generated automatically by `demo.ipynb` at the same directory level as your input directory.
-
-#### Helper Functions
-- `region_of_interest` keeps the region of the image defined by the user while the rest of the image is set to black.
-- `ransac_polyfit` finds the best 2nd order model coefficients by randomly testing subsets of a lane's line 
-- `line_slope_classifier` classifies pairs of pixel coordinates as left or right lane line based on the pair's line slope. It also allows the user to increase the density of points belonging to left or right lane line.
-- `draw_lines` makes use of `region_of_interest`, `ransac_polyfit`, and `line_slope_classifier` to draw the left and right lines of the vehicle's current lane with a user defined color and thickness.
-- `draw_roi_box` this is a visual helper. It draws a contour of color around the region of interest to visually identify it. 
-- `draw_hough_lines` this is a visual helper. It draws all hough lines with random colors to visually identify them.
-
-#### Pipeline 
-This is the process through which each image or video frame goes through.
-
-<p align="center"> <img src="README_images/before.PNG"> </p>
-<p align="center"> Fig: Original Image </p>
-
-<p align="center"> <img src="README_images/pipeline.PNG"> </p>
-<p align="center"> Fig: Step 1 -> transform to gray.
-    Step 2 -> blurr image.
-    Step 3 -> apply canny edge detection.
-    Step 4 -> obtain region of interest.
-    Step 5 -> apply hough transform.
-    Step 6 -> draw lines: classify hough lines and apply RANSAC to find polynomial model. </p>
-
-<p align="center"> <img src="README_images/after.PNG"> </p>
-<p align="center">Fig: Final image (Note: Step 6 can be applied directly to the color image) </p>
-
-
-## Drawbacks and improvements
-
-From the challenge video one can identify that the techniques implemented are good for determining lines on on the road but has issues extrapolating those lines. `line_slope_classifier` function needs improvement since it fails when the lane has steep curves. Also the second order polinomial line models for each line should share the same `a` coefficient in `ay^2+by+c` since both lines curve in the same direction. We will deal with this issues in our next repo.
-
-
-
-
-**Build a Traffic Sign Recognition Project**
-
-The goals / steps of this project are the following:
-* Load the data set (see below for links to the project data set)
-* Explore, summarize and visualize the data set
-* Design, train and test a model architecture
-* Use the model to make predictions on new images
-* Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
-
-
-
-
-## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
-
----
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
-
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
-
-### Data Set Summary & Exploration
-
-#### 1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
-
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
-
-* The size of training set is ?
-* The size of the validation set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
-
-#### 2. Include an exploratory visualization of the dataset.
-
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
-
-![alt text][image1]
-
-### Design and Test a Model Architecture
-
-#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
-
-As a first step, I decided to convert the images to grayscale because ...
-
-Here is an example of a traffic sign image before and after grayscaling.
-
+The demo file makes use of the German traffic sign dataset to show results. However, once you have run and understood the `demo.ipynb`, feel free to try your own dataset by changing the input directories from 'Load The Data' section in the demo file. The dataset provided for training and validation are pickle files containing RESIZED VERSIONS (32 by 32) of the [original dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). There exist two test sets for evaluation, one as a pickle file with the same instructions as validation and training set, and the other is `my_test_images` with images I collected from the web. The following is a catalog of the signs in the dataset as labeled in `signnames.csv`:
 ![alt text][image2]
 
-As a last step, I normalized the image data because ...
+The dataset contains 43 classes labeled from [0-42]. The image shape is (32, 32, 3) for all pickle files while `my_test_images` has images of random sizes which are later preprocessed to be resized to (32, 32, 3). <b>ADD in `my_test_images` YOUR OWN GERMAN TRAFFIC SIGNS FOR TESTING.</b>
 
-I decided to generate additional data because ... 
+Training Set   : 34799 samples
+Validation Set :  4410 samples
+Test Set       : 12630 samples
+My Test Set    :     6 samples
 
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
+The distribution of the training set is:
 ![alt text][image3]
 
-The difference between the original data set and the augmented data set is the following ... 
 
+#### Model Architecture
+The model of the neural network has a LeNet architecture with dropout added in the fully connected layers to improve accuracy. The LeNet architecture requires the input image to be 32x32 so every image goes through preprocessing for rescaling and normalization. Normalization is done by substracting from every image the mean and dividing it by the standard deviation. Both mean and std are from the training set. The following image shows the architecture and its specifications.
 
-#### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+![alt text][image4]
 
 My final model consisted of the following layers:
 
-| Layer         		|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
+###### Note: 
+![alt text][image5]
+
+- Normalization helps to find faster better weights during training 
+- The dropout added to the LeNet architecture increased accuracy by 4%
+- The optimizer used was Adam
 
 
-#### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+## Analysis of Model on Test Images
 
-To train the model, I used an ....
+Here are five random German traffic signs that I found on the web:
 
-#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+![alt text][image6]
 
-My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+The model's top 5 softmax predictions on each of these new traffic signs were:
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+For <b>Stop</b> The top 5 softmax results:
+|Prob:| Prediction|
+|:--:|:--:|
+| 100.0%   | Priority road |
+| 0.0%   | End of no passing by vehicles over 3.5 metric tons |
+| 0.0%   | No passing for vehicles over 3.5 metric tons |
+| 0.0%    |End of no passing |
+| 0.0%   |Right-of-way at the next intersection |
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+For "Children crossing" The top 5 softmax results:
+	 99.64%   : Children crossing 
+	 0.3%   : Pedestrians 
+	 0.03%   : Right-of-way at the next intersection 
+	 0.02%   : Road narrows on the right 
+	 0.01%   : Dangerous curve to the right 
 
-### Test a Model on New Images
+For "Go straight or right" The top 5 softmax results:
+	 100.0%   : Go straight or right 
+	 0.0%   : General caution 
+	 0.0%   : Keep right 
+	 0.0%   : Roundabout mandatory 
+	 0.0%   : Turn left ahead 
 
-#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+For "Speed limit (30km/h)" The top 5 softmax results:
+	 98.78%   : Speed limit (30km/h) 
+	 0.86%   : Speed limit (20km/h) 
+	 0.36%   : Speed limit (70km/h) 
+	 0.0%   : Speed limit (50km/h) 
+	 0.0%   : Speed limit (80km/h) 
 
-Here are five German traffic signs that I found on the web:
-
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
-
-The first image might be difficult to classify because ...
-
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
-
-Here are the results of the prediction:
-
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+For "Roundabout mandatory" The top 5 softmax results:
+	 99.96%   : Roundabout mandatory 
+	 0.04%   : Turn right ahead 
+	 0.0%   : Ahead only 
+	 0.0%   : Go straight or left 
+	 0.0%   : Turn left ahead 
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the original test set of 100.0 %
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
-
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
-
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+The `STOP` traffic sign failed predicting it as `Priority Road` so let's inspect the feature maps of LeNet's first convolution, first max pool, and second convolution.
+![alt text][image7]
 
 
-For the second image ... 
-
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+## Drawbacks and improvements
+With a very basic architecture we were able to reach 95% accuracy. Possible improvements would be to make the architecture deeper to reach higher accuracy, evaluate different traffic sign dataset, and add detection to classify multiple traffic signs per image.   
 
 
