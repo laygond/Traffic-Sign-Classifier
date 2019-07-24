@@ -76,10 +76,12 @@ The model of the neural network has a LeNet architecture with dropout added in t
 
 ###### Note: 
 
+- `d = 075` in this case means you keep 75% of the fully connected layer
 - Normalization helps to find faster better weights during training 
 - The dropout added to the LeNet architecture increased the training accuracy by 4% than without.
 - The optimizer used was Adam
 - The Networks parameters were  the following:
+
 ![alt text][image5]
 
 
@@ -149,6 +151,7 @@ The model's top 5 softmax predictions on each of these new traffic signs were:
 The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the original test set of 100.0 %
 
 The `STOP` traffic sign failed in the prediction with `Priority Road` so let's inspect the its feature maps in for LeNet's first convolutional, first max pool, and second convolutional layers.
+
 ![alt text][image7]
 
 
