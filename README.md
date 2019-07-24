@@ -47,15 +47,22 @@ The demo file has the following sections:
 - Inpection & Analysis of Model
 
 #### Dataset
-The demo file makes use of the German traffic sign dataset to show results. However, once you have run and understood the `demo.ipynb`, feel free to try your own dataset by changing the input directories from 'Load The Data' section in the demo file. The dataset provided for training and validation are pickle files containing RESIZED VERSIONS (32 by 32) of the [original dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). There exist two test sets for evaluation, one as a pickle file with the same instructions as validation and training set, and the other is `my_test_images` with images I collected from the web. The following is a catalog of the signs in the dataset as labeled in `signnames.csv`:
+The demo file makes use of the German traffic sign dataset to show results. However, once you have run and understood the `demo.ipynb`, feel free to try your own dataset by changing the input directories from 'Load The Data' section in the demo file.
+
+The dataset provided for training and validation are pickle files containing RESIZED VERSIONS (32 by 32) of the [original dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). There exist two test sets for evaluation, one as a pickle file with the same instructions as validation and training set, and the other is `my_test_images` with images I collected from the web.
+
+The following is a catalog of the signs in the dataset as labeled in `signnames.csv`:
+
 ![alt text][image2]
 
 The dataset contains 43 classes labeled from [0-42]. The image shape is (32, 32, 3) for all pickle files while `my_test_images` has images of random sizes which are later preprocessed to be resized to (32, 32, 3). <b>ADD in `my_test_images` YOUR OWN GERMAN TRAFFIC SIGNS FOR TESTING.</b>
 
-Training Set   : 34799 samples
-Validation Set :  4410 samples
-Test Set       : 12630 samples
-My Test Set    :     6 samples
+| Set | Samples |
+| :---  | :--------: |
+| Training Set   | 34799  |
+| Validation Set |  4410  |
+| Test Set       | 12630  |
+| My Test Set    |     6  |
 
 The distribution of the training set is:
 ![alt text][image3]
@@ -66,14 +73,14 @@ The model of the neural network has a LeNet architecture with dropout added in t
 
 ![alt text][image4]
 
-My final model consisted of the following layers:
 
 ###### Note: 
-![alt text][image5]
 
 - Normalization helps to find faster better weights during training 
-- The dropout added to the LeNet architecture increased accuracy by 4%
+- The dropout added to the LeNet architecture increased the training accuracy by 4% 
 - The optimizer used was Adam
+- The Networks parameters were  the following:
+![alt text][image5]
 
 
 ## Analysis of Model on Test Images
@@ -84,51 +91,67 @@ Here are five random German traffic signs that I found on the web:
 
 The model's top 5 softmax predictions on each of these new traffic signs were:
 
-For <b>Stop</b> The top 5 softmax results:
-|Prob:| Prediction|
-|:--:|:--:|
-| 100.0%   | Priority road |
+<b>Stop</b> 
+| Prob: | Top 5 Predictions |
+| ---:  | :--------: |
+| 100.0% | Priority road |
 | 0.0%   | End of no passing by vehicles over 3.5 metric tons |
 | 0.0%   | No passing for vehicles over 3.5 metric tons |
-| 0.0%    |End of no passing |
-| 0.0%   |Right-of-way at the next intersection |
+| 0.0%   | End of no passing |
+| 0.0%   | Right-of-way at the next intersection |
 
-For "Children crossing" The top 5 softmax results:
-	 99.64%   : Children crossing 
-	 0.3%   : Pedestrians 
-	 0.03%   : Right-of-way at the next intersection 
-	 0.02%   : Road narrows on the right 
-	 0.01%   : Dangerous curve to the right 
+<b>Children crossing,</b>
+| Prob: | Top 5 Predictions |
+| ---:  | :--------: |
+| 99.64%  | Children crossing |
+| 0.3%    | Pedestrians |
+| 0.03%   | Right-of-way at the next intersection |
+| 0.02%   | Road narrows on the right |
+| 0.01%   | Dangerous curve to the right |
 
-For "Go straight or right" The top 5 softmax results:
-	 100.0%   : Go straight or right 
-	 0.0%   : General caution 
-	 0.0%   : Keep right 
-	 0.0%   : Roundabout mandatory 
-	 0.0%   : Turn left ahead 
+<b>Go straight or right</b>
+| Prob: | Top 5 Predictions |
+| ---:  | :--------: |
+| 100.0% | Go straight or right |
+| 0.0%   | General caution |
+| 0.0%   | Keep right |
+| 0.0%   | Roundabout mandatory |
+| 0.0%   | Turn left ahead |
 
-For "Speed limit (30km/h)" The top 5 softmax results:
-	 98.78%   : Speed limit (30km/h) 
-	 0.86%   : Speed limit (20km/h) 
-	 0.36%   : Speed limit (70km/h) 
-	 0.0%   : Speed limit (50km/h) 
-	 0.0%   : Speed limit (80km/h) 
+<b>Speed limit (30km/h)</b>
+| Prob: | Top 5 Predictions |
+| ---:  | :--------: |
+| 98.78% | Speed limit (30km/h) |
+| 0.86%  | Speed limit (20km/h) |
+| 0.36%  | Speed limit (70km/h) |
+| 0.0%   | Speed limit (50km/h) |
+| 0.0%   | Speed limit (80km/h) |
 
-For "Roundabout mandatory" The top 5 softmax results:
-	 99.96%   : Roundabout mandatory 
-	 0.04%   : Turn right ahead 
-	 0.0%   : Ahead only 
-	 0.0%   : Go straight or left 
-	 0.0%   : Turn left ahead 
+<b>Roundabout mandatory</b>
+| Prob: | Top 5 Predictions |
+| ---:  | :--------: |
+| 99.96% | Roundabout mandatory | 
+| 0.04%  | Turn right ahead |
+| 0.0%   | Ahead only |
+| 0.0%   | Go straight or left |
+| 0.0%   | Turn left ahead |
 
 
 The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the original test set of 100.0 %
 
-The `STOP` traffic sign failed predicting it as `Priority Road` so let's inspect the feature maps of LeNet's first convolution, first max pool, and second convolution.
+The `STOP` traffic sign failed in the prediction with `Priority Road` so let's inspect the its feature maps in for LeNet's first convolutional, first max pool, and second convolutional layers.
 ![alt text][image7]
 
 
 ## Drawbacks and improvements
-With a very basic architecture we were able to reach 95% accuracy. Possible improvements would be to make the architecture deeper to reach higher accuracy, evaluate different traffic sign dataset, and add detection to classify multiple traffic signs per image.   
+The architecture is very basic, although we were able to reach:
+
+| Set   | Accuracy |
+| :---  | :--------: |
+| Validation Set |   95.4% |
+| Test Set       | 100.0%  |
+| My Test Set    |     80%  |
+
+Possible improvements would be to make the architecture deeper to reach higher accuracy, evaluate how well the model performs if trained on other countries\` traffic signs, add detection to classify multiple traffic signs per image.   
 
 
