@@ -29,9 +29,9 @@ This project trains and test a very simple classification neural network. The ne
     │   ├── signnames.csv        # name and ID of each traffic sign in the dataset
     │   ├── my_test_images       # images found by me on the web for testing (ADD YOUR OWN HERE)
     │   │   └── ...
-    │   ├── test.p               # second collection of test images for testing and comes
-    │   ├── train.p              #in same format as training and validation, i.e, resized
-    │   └── valid.p              #images stored as pickle files 
+    │   ├── test.p               # second collection of test images for testing and it comes
+    │   ├── train.p              # \\in the same format as training and validation, i.e, resized
+    │   └── valid.p              # \\images stored as pickle files 
     └── US_Traffic_Sign_Dataset
 ```
 
@@ -55,7 +55,7 @@ The following is a catalog of the signs in the dataset as labeled in `signnames.
 
 ![alt text][image2]
 
-The dataset contains 43 classes labeled from [0-42]. The image shape is (32, 32, 3) for all pickle files while `my_test_images` has images of random sizes which are later preprocessed to be resized to (32, 32, 3). <b>ADD in `my_test_images` YOUR OWN GERMAN TRAFFIC SIGNS FOR TESTING.</b>
+The dataset contains 43 classes labeled from [0-42]. The image shape is (32, 32, 3) for all pickle files while `my_test_images` has images of random sizes which are later preprocessed to be resized to (32, 32, 3). <b>ADD YOUR OWN GERMAN TRAFFIC SIGNS FOR TESTING IN  `my_test_images`.</b>
 
 | Set | Samples |
 | :---  | :--------: |
@@ -77,7 +77,7 @@ The model of the neural network has a LeNet architecture with dropout added in t
 ###### Note: 
 
 - Normalization helps to find faster better weights during training 
-- The dropout added to the LeNet architecture increased the training accuracy by 4% 
+- The dropout added to the LeNet architecture increased the training accuracy by 4% than without.
 - The optimizer used was Adam
 - The Networks parameters were  the following:
 ![alt text][image5]
@@ -92,44 +92,53 @@ Here are five random German traffic signs that I found on the web:
 The model's top 5 softmax predictions on each of these new traffic signs were:
 
 <b>Stop</b> 
+
 | Prob: | Top 5 Predictions |
-| ---:  | :--------: |
+| ---:  | :-------- |
 | 100.0% | Priority road |
 | 0.0%   | End of no passing by vehicles over 3.5 metric tons |
 | 0.0%   | No passing for vehicles over 3.5 metric tons |
 | 0.0%   | End of no passing |
 | 0.0%   | Right-of-way at the next intersection |
 
-<b>Children crossing,</b>
+
+<b>Children crossing</b>
+
 | Prob: | Top 5 Predictions |
-| ---:  | :--------: |
+| ---:  | :-------- |
 | 99.64%  | Children crossing |
 | 0.3%    | Pedestrians |
 | 0.03%   | Right-of-way at the next intersection |
 | 0.02%   | Road narrows on the right |
 | 0.01%   | Dangerous curve to the right |
 
+
 <b>Go straight or right</b>
+
 | Prob: | Top 5 Predictions |
-| ---:  | :--------: |
+| ---:  | :-------- |
 | 100.0% | Go straight or right |
 | 0.0%   | General caution |
 | 0.0%   | Keep right |
 | 0.0%   | Roundabout mandatory |
 | 0.0%   | Turn left ahead |
 
+
 <b>Speed limit (30km/h)</b>
+
 | Prob: | Top 5 Predictions |
-| ---:  | :--------: |
+| ---:  | :-------- |
 | 98.78% | Speed limit (30km/h) |
 | 0.86%  | Speed limit (20km/h) |
 | 0.36%  | Speed limit (70km/h) |
 | 0.0%   | Speed limit (50km/h) |
 | 0.0%   | Speed limit (80km/h) |
 
+
 <b>Roundabout mandatory</b>
+
 | Prob: | Top 5 Predictions |
-| ---:  | :--------: |
+| ---:  | :-------- |
 | 99.96% | Roundabout mandatory | 
 | 0.04%  | Turn right ahead |
 | 0.0%   | Ahead only |
@@ -147,7 +156,7 @@ The `STOP` traffic sign failed in the prediction with `Priority Road` so let's i
 The architecture is very basic, although we were able to reach:
 
 | Set   | Accuracy |
-| :---  | :--------: |
+| :---  | --------: |
 | Validation Set |   95.4% |
 | Test Set       | 100.0%  |
 | My Test Set    |     80%  |
