@@ -1,6 +1,6 @@
-# Traffic Sign Classification in Tensorflow
+# Traffic Sign Classification in Tensorflow V1
 
-This project trains and test a very simple classification neural network. The neural network has a LeNet architecture with dropout added in the fully connected layers to improve accuracy. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This implies ONE object per image as oppose to Detection which implies MULTIPLE objects per image. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
+This project trains and test a LeNet classification neural network using Tensorflow V1. As regularizations to the LeNet architecture, dropout has been added in the fully connected layers to improve accuracy. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This implies ONE object per image as oppose to Detection which implies MULTIPLE objects per image. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
 
 [//]: # (List of Images used in this README.md)
 [image1]: ./README_images/visualization.gif "Visualization"
@@ -36,17 +36,17 @@ This project trains and test a very simple classification neural network. The ne
 ```
 
 ## Demo File
-#### Overview
-The demo file has the following sections:
+The `demo.ipynb` file is the main file of this project and has the following sections:
 
-- Load the data set (see below for links to the project data set)
+- Load the data set (links to the project data set are included)
 - Explore and visualize the data set
+- Pre-process the data set
 - Model architecture Design
 - Train and Validate Model
 - Test Model
 - Inpection & Analysis of Model
 
-#### Dataset
+## Data set
 The demo file makes use of the German traffic sign dataset to show results. However, once you have run and understood the `demo.ipynb`, feel free to try your own dataset by changing the input directories from 'Load The Data' section in the demo file.
 
 The dataset provided for training and validation are pickle files containing RESIZED VERSIONS (32 by 32) of the [original dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). There exist two test sets for evaluation, one as a pickle file with the same instructions as validation and training set, and the other is `my_test_images` with images I collected from the web.
@@ -67,14 +67,45 @@ The dataset contains 43 classes labeled from [0-42]. The image shape is (32, 32,
 The distribution of the training set is:
 ![alt text][image3]
 
+#### Pre-processing of data set
+Besides resizing all images to (32,32) we have included three types of normalization preprocessing. Normalization is done by substracting from every image the mean and dividing it by the standard deviation.
+- The first type takes an abrupt approach by just substracting 128 and divinding by 128.
+- The second type uses the mean and std from the training set. 
+- The third type uses the mean and std from the Imagenet set which is a collection of images from all over the world. 
+```
+def preprocess(X, using_type=3):
+    """ 
+    Preprocess assumes X is of shape [numOfImages, height, width, channels]. 
+    Set type number to specify the type of normalization you desire:
+        Type 1: Quick way to approximately normalize the data (pixel - 128)/ 128.
+        Type 2: Classic normalization based on Training set.
+        Type 3: ImageNet normalization
+    """
+    if (using_type == 1):
+        return (X - 128)/ 128
+    elif (using_type == 2):
+        return (X - np.mean(X_train))/ np.std(X_train)
+    elif (using_type == 3):
+        RGB_mean = [0.485, 0.456, 0.406]
+        RGB_std = [0.229, 0.224, 0.225]
+        X = X/255.0
+        X[:, 0, :, :] -= RGB_mean[0]
+        X[:, 1, :, :] -= RGB_mean[1]
+        X[:, 2, :, :] -= RGB_mean[2]
+        X[:, 0, :, :] /= RGB_std[0]
+        X[:, 1, :, :] /= RGB_std[1]
+        X[:, 2, :, :] /= RGB_std[2]
+        return X
+        
+```
+A discussion of their performance is examined in the "Analysis" section further below.
 
-#### Model Architecture
-The model of the neural network has a LeNet architecture with dropout added in the fully connected layers to improve accuracy. The LeNet architecture requires the input image to be 32x32 so every image goes through preprocessing for rescaling and normalization. Normalization is done by substracting from every image the mean and dividing it by the standard deviation. Both mean and std are from the training set. The following image shows the architecture and its specifications.
+## Model Architecture
+The model of the neural network has a LeNet architecture with dropout added in the fully connected layers to improve accuracy. The LeNet architecture requires the input image to be 32x32 so every image goes through preprocessing for rescaling and normalization. The following image shows the architecture and its specifications.
 
 ![alt text][image4]
 
-
-###### Note: 
+#### Note: 
 
 - `d = 075` in this case means you keep 75% of the fully connected layer
 - Normalization helps to find faster better weights during training 
@@ -148,7 +179,7 @@ The model's top 5 softmax predictions on each of these new traffic signs were:
 | 0.0%   | Turn left ahead |
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the original test set of 100.0 %
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. There are several reasons why the accuracy is not high. The model was trained on images that were taken from a single camera device. Therefore all these training images resemble specific single camera parameters while the images in `my_test_images`, which were taken from the web, resemble multiple camera parameters. This introduces object distortion which our model is not robust against. Also the preprocessing for `my_test_images` should be specially adjusted to consider aspect ratio. The original resolution of these images before they are resized to (32x32) vary and therefore a great deal of distortion is introduced.This compares favorably to the accuracy on the original test set of 100.0 %
 
 The `STOP` traffic sign failed in the prediction with `Priority Road` so let's inspect the its feature maps in for LeNet's first convolutional, first max pool, and second convolutional layers.
 
@@ -164,6 +195,6 @@ The architecture is very basic, although we were able to reach:
 | Test Set       | 100.0%  |
 | My Test Set    |     80%  |
 
-Possible improvements would be to make the architecture deeper to reach higher accuracy, evaluate how well the model performs if trained on other countries\` traffic signs, add detection to classify multiple traffic signs per image.   
+Possible improvements would be to make the architecture deeper to reach higher accuracy, incorporate more regularization techniques such as data augmentation. Also evaluate how well the model performs if trained on other countries\` traffic signs as well as include detection to classify multiple traffic signs per image.   
 
 
