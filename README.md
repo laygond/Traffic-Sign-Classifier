@@ -165,6 +165,8 @@ The model's top 5 softmax predictions on each of these traffic signs under the c
 
 <b>Speed limit (70km/h)</b>
 
+| Prob: | Top 5 Predictions |
+| ---:  | :-------- |
 |99.66%  |  Speed limit (20km/h) |
 | 0.3%   | Speed limit (30km/h) |
 | 0.03%  |  General caution |
