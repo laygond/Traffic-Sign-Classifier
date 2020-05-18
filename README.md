@@ -1,6 +1,6 @@
 # Traffic Sign Classification in Tensorflow V1
 
-This project trains and test a LeNet classification neural network using Tensorflow V1. As regularizations to the LeNet architecture, dropout has been added in the fully connected layers to improve accuracy. The model architecture is trained on traffic signs for recognition and later tested on new images. Prior steps such as detection and alignment are not part of this repo. This implies ONE object per image as oppose to Detection which implies MULTIPLE objects per image. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
+This project trains and test a LeNet classification neural network using Tensorflow V1. As regularizations to the LeNet architecture, dropout has been added in the fully connected layers to improve accuracy. The model architecture is trained on traffic signs for recognition and later tested on new images pulled from the web. Prior steps such as detection and alignment are not part of this repo. This implies ONE object per image as oppose to Detection which implies MULTIPLE objects per image. This repo uses [Udacity's CarND-Traffic-Sign-Classifier-Project repo](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project) as a base template and guide. 
 
 [//]: # (List of Images used in this README.md)
 [image1]: ./README_images/visualization.gif "Visualization"
@@ -25,14 +25,14 @@ This project trains and test a LeNet classification neural network using Tensorf
 ├── net_weights                  # the model's kernel weights are stored here
 │   └── ...
 └── dataset
-    ├── German_Traffic_Sign_Dataset
-    │   ├── signnames.csv        # name and ID of each traffic sign in the dataset
-    │   ├── my_test_images       # images found by me on the web for testing (ADD YOUR OWN HERE)
-    │   │   └── ...
-    │   ├── test.p               # second collection of test images for testing and it comes
-    │   ├── train.p              # \\in the same format as training and validation, i.e, resized
-    │   └── valid.p              # \\images stored as pickle files 
-    └── US_Traffic_Sign_Dataset
+    └── German_Traffic_Sign_Dataset
+       ├── signnames.csv        # name and ID of each traffic sign in the dataset
+       ├── my_test_images       # images found by me on the web for testing (ADD YOUR OWN HERE)
+       │   └── ...
+       ├── test.p               # second collection of test images for testing and it comes
+       ├── train.p              # \\in the same format as training and validation, i.e, resized
+       └── valid.p              # \\images stored as pickle files 
+    
 ```
 
 ## Demo File
@@ -68,7 +68,7 @@ The distribution of the training set is:
 ![alt text][image3]
 
 #### Pre-processing of data set
-Besides resizing all images to (32,32) we have included three types of normalization preprocessing. Normalization is done by substracting from every image the mean and dividing it by the standard deviation.
+Besides resizing all images to (32,32) we have included three types of normalizations under the preprocess function. Normalization is done by substracting from every image the mean and dividing it by the standard deviation.
 - The first type takes an abrupt approach by just substracting 128 and divinding by 128.
 - The second type uses the mean and std from the training set. 
 - The third type uses the mean and std from the Imagenet set which is a collection of images from all over the world. 
@@ -111,18 +111,95 @@ The model of the neural network has a LeNet architecture with dropout added in t
 - Normalization helps to find faster better weights during training 
 - The dropout added to the LeNet architecture increased the training accuracy by 4% than without.
 - The optimizer used was Adam
-- The Networks parameters were  the following:
+- The Networks parameters were the following:
 
 ![alt text][image5]
 
 
-## Analysis of Model on Test Images
+## Analysis and Evaluation of Model 
+A comparison of the the model's performance under the three types of normalization techniques is presented below.
 
-Here are five random German traffic signs that I found on the web:
+Using an Imagenet Normalization:
+| Set   | Accuracy |
+| :---  | --------: |
+| Validation Set |   94.0% |
+| Test Set       | 92.46%  |
+| My Test Set    | 66.67%  |
+
+Using the training set for Normalization:
+| Set   | Accuracy |
+| :---  | --------: |
+| Validation Set |   95.3% |
+| Test Set       | 93.43%  |
+| My Test Set    | 66.67%  |
+
+Using the 128 value for Normalization:
+| Set   | Accuracy |
+| :---  | --------: |
+| Validation Set |  76.4% |
+| Test Set       | 76.31%  |
+| My Test Set    | 50.0%  |
+
+In all three types of normalizations the results for `my_test_images` were poor. There are several reasons why the accuracy is not higher. The model was trained on images that do not have aspect ratio distortion. As stated from the original data set website, each traffic sign image is (250x250). Therefore all these training, test, and validation images had a square resolution before being downscaled to (32x32). `my_test_images`, which were taken from the web, resemble multiple non-square resolutions. This introduces object distortion when being downscaled which our model is not robust against. The preprocessing for `my_test_images` should be specially adjusted to consider aspect ratio.
+
+For the comparison among all three normalizations, the validation and test results under the same training set normalization (classic normalization) performs better than the imagenet normalization with almost a 2% difference. Although the shuffling of the data set has been set to fixed random states for reproducibility of results, the weights are randomly initiliazed so the accuracy results do change slightly. Nonetheless, among the multiple runs, the classic normalization on average performs better than the imagenet normalization. The imagenet set has mean and std values accross multiple classess while the traffic sign set has mean and std only accross traffic signs. The pixel intensities in the classic normalization are therefore more suited for the task. Under this same conditions, although I have stated that for `my_test_images` the imagenet and classic normalization have the same accuracy, I did witness an 83% accuracy from the classic normalization (that is one image more: 5/6 rather than 4/6). An increase of sample images under `my_test_images` is needed to see the underlying effects. Finally, the quick normalization yielded the worst results which <b>proves the need and importance of applying a proper preprocessing to the data set</b>. 
+
+#### Further evaluation ...
+Here are six random German traffic signs that I found on the web:
 
 ![alt text][image6]
 
-The model's top 5 softmax predictions on each of these new traffic signs were:
+The model was able to correctly guess 4 of the 6 traffic signs, which gives an accuracy of 66.67% under the classic amd imagenet normalization. 
+
+The model's top 5 softmax predictions on each of these traffic signs under the classic normalization were:
+
+<b>Speed limit (30km/h)</b>
+
+| Prob: | Top 5 Predictions |
+| ---:  | :-------- |
+| 98.78% | Speed limit (30km/h) |
+| 0.86%  | Speed limit (20km/h) |
+| 0.36%  | Speed limit (70km/h) |
+| 0.0%   | Speed limit (50km/h) |
+| 0.0%   | Speed limit (80km/h) |
+
+<b>Speed limit (70km/h)</b>
+
+|99.66%  |  Speed limit (20km/h) |
+| 0.3%   | Speed limit (30km/h) |
+| 0.03%  |  General caution |
+| 0.01%  |  Speed limit (70km/h) |
+| 0.0%   | Road work |
+
+<b>Children crossing</b>
+
+| Prob: | Top 5 Predictions |
+| ---:  | :-------- |
+| 99.64%  | Children crossing |
+| 0.3%    | Pedestrians |
+| 0.03%   | Right-of-way at the next intersection |
+| 0.02%   | Road narrows on the right |
+| 0.01%   | Dangerous curve to the right |
+
+<b>Go straight or right</b>
+
+| Prob: | Top 5 Predictions |
+| ---:  | :-------- |
+| 100.0% | Go straight or right |
+| 0.0%   | General caution |
+| 0.0%   | Keep right |
+| 0.0%   | Roundabout mandatory |
+| 0.0%   | Turn left ahead |
+
+<b>Roundabout mandatory</b>
+
+| Prob: | Top 5 Predictions |
+| ---:  | :-------- |
+| 99.96% | Roundabout mandatory | 
+| 0.04%  | Turn right ahead |
+| 0.0%   | Ahead only |
+| 0.0%   | Go straight or left |
+| 0.0%   | Turn left ahead |
 
 <b>Stop</b> 
 
@@ -135,66 +212,22 @@ The model's top 5 softmax predictions on each of these new traffic signs were:
 | 0.0%   | Right-of-way at the next intersection |
 
 
-<b>Children crossing</b>
-
-| Prob: | Top 5 Predictions |
-| ---:  | :-------- |
-| 99.64%  | Children crossing |
-| 0.3%    | Pedestrians |
-| 0.03%   | Right-of-way at the next intersection |
-| 0.02%   | Road narrows on the right |
-| 0.01%   | Dangerous curve to the right |
-
-
-<b>Go straight or right</b>
-
-| Prob: | Top 5 Predictions |
-| ---:  | :-------- |
-| 100.0% | Go straight or right |
-| 0.0%   | General caution |
-| 0.0%   | Keep right |
-| 0.0%   | Roundabout mandatory |
-| 0.0%   | Turn left ahead |
-
-
-<b>Speed limit (30km/h)</b>
-
-| Prob: | Top 5 Predictions |
-| ---:  | :-------- |
-| 98.78% | Speed limit (30km/h) |
-| 0.86%  | Speed limit (20km/h) |
-| 0.36%  | Speed limit (70km/h) |
-| 0.0%   | Speed limit (50km/h) |
-| 0.0%   | Speed limit (80km/h) |
-
-
-<b>Roundabout mandatory</b>
-
-| Prob: | Top 5 Predictions |
-| ---:  | :-------- |
-| 99.96% | Roundabout mandatory | 
-| 0.04%  | Turn right ahead |
-| 0.0%   | Ahead only |
-| 0.0%   | Go straight or left |
-| 0.0%   | Turn left ahead |
-
-
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. There are several reasons why the accuracy is not high. The model was trained on images that were taken from a single camera device. Therefore all these training images resemble specific single camera parameters while the images in `my_test_images`, which were taken from the web, resemble multiple camera parameters. This introduces object distortion which our model is not robust against. Also the preprocessing for `my_test_images` should be specially adjusted to consider aspect ratio. The original resolution of these images before they are resized to (32x32) vary and therefore a great deal of distortion is introduced.This compares favorably to the accuracy on the original test set of 100.0 %
-
-The `STOP` traffic sign failed in the prediction with `Priority Road` so let's inspect the its feature maps in for LeNet's first convolutional, first max pool, and second convolutional layers.
+The `STOP` traffic sign failed in the prediction with 100% for `Priority Road` so let's inspect the its feature maps in for LeNet's first convolutional, first max pool, and second convolutional layers.
 
 ![alt text][image7]
 
+From the training distribution graph there are less than 750 images for stop signs in comparison to priority road with 1750 so the model is heavily influenced. As can be seen here the model requires more training with what is a stop sign. Additional reasons for failure include the lack of correct aspect ratio correction when rescaling.
 
 ## Drawbacks and improvements
 The architecture is very basic, although we were able to reach:
 
+Using the training set for Normalization:
 | Set   | Accuracy |
 | :---  | --------: |
-| Validation Set |   95.4% |
-| Test Set       | 100.0%  |
-| My Test Set    |     80%  |
+| Validation Set |   95.3% |
+| Test Set       | 93.43%  |
+| My Test Set    | 66.67%  |
 
-Possible improvements would be to make the architecture deeper to reach higher accuracy, incorporate more regularization techniques such as data augmentation. Also evaluate how well the model performs if trained on other countries\` traffic signs as well as include detection to classify multiple traffic signs per image.   
+Possible improvements would be to make the architecture deeper to reach higher accuracy, incorporate more regularization techniques such as data augmentation. Also, as additional features, include detection to classify multiple traffic signs per image.   
 
 
